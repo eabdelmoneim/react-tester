@@ -15,13 +15,15 @@ export default function Home() {
   if(!address) {
     return <div style={{ width: 200 }}><ConnectWallet></ConnectWallet></div>
   }
-  else if (!contractLoading) {
+  else if (contractLoading) {
     return <div>Contract Loading...</div>;
-  } else if (!ownedNFTsLoading) {
-    return <div>Owned NFTs Loading...</div>;
-  }
-  else {
-    console.log(data);
+  } //else if (!ownedNFTsLoading) {
+    //return <div>Owned NFTs Loading...</div>;
+ // }
+  else if (!contractLoading && ownedNFTsLoading) {
+    console.log(contract);
+    return <div>Contract Loaded loading owned NFTs</div>;
+    
     // if(data && data?.length !== 0) {
     // data?.map((item) => {
     //   console.log(item);
@@ -30,8 +32,9 @@ export default function Home() {
     //     console.log(attributes[i].value);
     //   }
     // });
+  } else if (!contractLoading && !ownedNFTsLoading) {
+    return <div>Everything loaded</div>;
   }
-
   return (
     <>
       <div style={{ width: 200 }}>
