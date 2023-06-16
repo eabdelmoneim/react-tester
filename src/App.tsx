@@ -1,49 +1,44 @@
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress  } from "@thirdweb-dev/react";
 import "./styles/Home.css";
+import { useContract, useOwnedNFTs } from "@thirdweb-dev/react";
 
 export default function Home() {
+  const address = useAddress();
+ // const { isLoggedIn } = useUser();
+
+  const { contract, isLoading: contractLoading } = useContract(
+    "0x739F0A1709e1515Aa6a91abC932ceFfBe5562f7A"
+  );
+
+  const { data, isLoading: ownedNFTsLoading } = useOwnedNFTs(contract, address);
+  
+  if(!address) {
+    return <div style={{ width: 200 }}><ConnectWallet></ConnectWallet></div>
+  }
+  else if (!contractLoading) {
+    return <div>Contract Loading...</div>;
+  } else if (!ownedNFTsLoading) {
+    return <div>Owned NFTs Loading...</div>;
+  }
+  else {
+    console.log(data);
+    // if(data && data?.length !== 0) {
+    // data?.map((item) => {
+    //   console.log(item);
+    //   let attributes = item.metadata.attributes as any[];
+    //   for(let i=0;i<attributes.length;i++){
+    //     console.log(attributes[i].value);
+    //   }
+    // });
+  }
+
   return (
-    <div className="container">
-      <main className="main">
-        <h1 className="title">
-          Welcome to <a href="https://thirdweb.com/">thirdweb</a>!
-        </h1>
-
-        <p className="description">
-          Get started by configuring your desired network in{" "}
-          <code className="code">src/index.tsx</code>, then modify the{" "}
-          <code className="code">src/App.tsx</code> file!
-        </p>
-
-        <div className="connect">
-          <ConnectWallet dropdownPosition={{ side: 'bottom', align: 'center' }} />
-        </div>
-
-        <div className="grid">
-          <a href="https://portal.thirdweb.com/" className="card">
-            <h2>Portal &rarr;</h2>
-            <p>
-              Guides, references and resources that will help you build with
-              thirdweb.
-            </p>
-          </a>
-
-          <a href="https://thirdweb.com/dashboard" className="card">
-            <h2>Dashboard &rarr;</h2>
-            <p>
-              Deploy, configure and manage your smart contracts from the
-              dashboard.
-            </p>
-          </a>
-
-          <a href="https://portal.thirdweb.com/templates" className="card">
-            <h2>Templates &rarr;</h2>
-            <p>
-              Discover and clone template projects showcasing thirdweb features.
-            </p>
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <div style={{ width: 200 }}>
+        <ConnectWallet></ConnectWallet>
+      </div>
+   
+     
+    </>
   );
 }
